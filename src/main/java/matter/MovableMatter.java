@@ -2,7 +2,7 @@ package matter;
 
 import coordinate.Point;
 import coordinate.Vector;
-import designate.Life;
+import designate.Feature;
 import designate.Shape;
 import designate.Type;
 import property.Movable;
@@ -16,15 +16,15 @@ public class MovableMatter extends DrawableMatter implements Movable {
     private final Vector motion;
     private final List<Vector> effects;
 
-    public MovableMatter(Point location, int width, int height, Type type, Life life, Shape shape, Vector motion) {
-        super(location, width, height, type, life, shape);
+    public MovableMatter(Point location, int width, int height, Type type, Feature feature, Shape shape, Vector motion) {
+        super(location, width, height, type, feature, shape);
         this.motion = motion;
         thread = new Thread(this);
         effects = new ArrayList<>();
     }
 
-    public MovableMatter(Point location, int radius, Type type, Life life, Shape shape, Vector motion) {
-        this(location, radius, radius, type, life, shape, motion);
+    public MovableMatter(Point location, int radius, Type type, Feature feature, Shape shape, Vector motion) {
+        this(location, radius, radius, type, feature, shape, motion);
     }
 
     @Override
@@ -81,5 +81,17 @@ public class MovableMatter extends DrawableMatter implements Movable {
         }
 
         getLocation().move(motion.getDisplacement());
+
+        synchronized (getMatters()) {
+            for (Matter matter : getMatters()) {
+                if (isCollision(matter) && this.getType() != matter.getType()) {
+                    this.hit(matter);
+
+                    if (!(matter instanceof Movable)) {
+                        matter.hit(this);
+                    }
+                }
+            }
+        }
     }
 }

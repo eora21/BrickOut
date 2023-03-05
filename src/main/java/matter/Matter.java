@@ -4,15 +4,18 @@ import coordinate.Point;
 import designate.Type;
 import event.CollisionEvent;
 import event.CollisionEventListener;
+import view.BrickWorld;
 
 import javax.swing.event.EventListenerList;
 import java.awt.*;
+import java.util.List;
 
 public class Matter {
     private final Point location;
     private int width;
     private int height;
     private final Type type;
+    private static final List<Matter> matters = BrickWorld.getMatters();
     private final EventListenerList listenerList;
 
     public Matter(Point location, int width, int height, Type type) {
@@ -80,5 +83,9 @@ public class Matter {
 
     protected Rectangle getRectangle() {
         return new Rectangle(getMinX(), getMinY(), getWidth(), getHeight());
+    }
+
+    public List<Matter> getMatters() {
+        return matters;
     }
 }

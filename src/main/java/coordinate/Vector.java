@@ -105,5 +105,10 @@ public class Vector {
         this.magnitude = magnitude;
         updateDisplacementVector();
     }
+
+    public void addAngle(int angle) {
+        this.angle += angle;
+        updateDisplacementVector();
+    }
 }
 

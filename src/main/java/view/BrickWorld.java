@@ -14,17 +14,28 @@ import java.util.stream.Collectors;
 
 public class BrickWorld extends JPanel {
     public static final long INTERVAL = 20L;
-    private final List<Matter> matters;
+    private static final List<Matter> matters = new ArrayList<>();
 
     public BrickWorld(int width, int height) {
         setSize(width, height);
-        matters = new ArrayList<>();
         add(new Matter(new Point(-getWidth() / 2, -getHeight() / 2),
                 getWidth() * 3, getHeight(), Type.BARRICADE));
         add(new Matter(new Point(-getWidth() / 2, getHeight() / 2),
                 getWidth(), getHeight() * 3, Type.BARRICADE));
         add(new Matter(new Point(getWidth() / 2 * 3, getHeight() / 2),
                 getWidth(), getHeight() * 3, Type.BARRICADE));
+
+        Matter killZone = new Matter(new Point(getWidth() / 2, getHeight() / 2 * 3),
+                getWidth() * 3, getHeight(), Type.BARRICADE);
+        killZone.addCollisionEventListener((event -> {
+            Matter matter = event.getDestination();
+            if (matter instanceof DrawableMatter) {
+                ((DrawableMatter) matter).kill();
+            }
+        }));
+
+        add(killZone);
+
     }
 
     public void add(Matter matter) {
@@ -38,7 +49,7 @@ public class BrickWorld extends JPanel {
 
     }
 
-    public List<Matter> getMatters() {
+    public static List<Matter> getMatters() {
         return matters;
     }
 
@@ -48,7 +59,7 @@ public class BrickWorld extends JPanel {
                 repaint();
                 synchronized (matters) {
                     matters.removeIf(matter ->
-                            matter instanceof DrawableMatter && ((DrawableMatter)matter).isZeroStrong());
+                            matter instanceof DrawableMatter && ((DrawableMatter) matter).isZeroStrong());
                 }
                 Thread.sleep(INTERVAL);
             } catch (InterruptedException ignore) {

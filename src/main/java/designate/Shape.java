@@ -1,25 +1,29 @@
 package designate;
 
-import coordinate.Point;
 import functional.GraphicsConsumer;
+import matter.DrawableMatter;
 
 import java.awt.*;
 
 public enum Shape {
-    BALL(Graphics::fillOval),
-    BRICK(Graphics::fillRect);
+    BALL(Graphics::drawOval, Graphics::fillOval),
+    BRICK(Graphics::drawRect, Graphics::fillRect);
 
-    private final GraphicsConsumer graphicsConsumer;
+    private final GraphicsConsumer drawConsumer;
+    private final GraphicsConsumer fillConsumer;
 
-    Shape(GraphicsConsumer graphicsConsumer) {
-        this.graphicsConsumer = graphicsConsumer;
+    Shape(GraphicsConsumer drawConsumer, GraphicsConsumer fillConsumer) {
+        this.drawConsumer = drawConsumer;
+        this.fillConsumer = fillConsumer;
     }
 
-    public void draw(Graphics graphics, Point point, int width, int height, Color color) {
+    public void draw(Graphics graphics, DrawableMatter matter, Color color) {
         Color oldColor = graphics.getColor();
 
+        graphics.setColor(Color.BLACK);
+        drawConsumer.accept(graphics, matter.getMinX(), matter.getMinY(), matter.getWidth(), matter.getHeight());
         graphics.setColor(color);
-        graphicsConsumer.accept(graphics, point.getX(), point.getY(), width, height);
+        fillConsumer.accept(graphics, matter.getMinX(), matter.getMinY(), matter.getWidth(), matter.getHeight());
 
         graphics.setColor(oldColor);
     }

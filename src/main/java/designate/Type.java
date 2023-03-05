@@ -4,6 +4,6 @@ public enum Type {
     BARRICADE,
     TARGET,
     DESTROYER,
-    KILL_ZONE;
+    PLAYER
 }
 
