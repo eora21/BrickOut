@@ -1,10 +1,10 @@
 package view;
 
 import coordinate.Point;
-import designate.Shape;
-import matter.Figure;
+import designate.Type;
+import matter.DrawableMatter;
 import matter.Matter;
-import type.Movable;
+import property.Movable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,11 +20,11 @@ public class BrickWorld extends JPanel {
         setSize(width, height);
         matters = new ArrayList<>();
         add(new Matter(new Point(-getWidth() / 2, -getHeight() / 2),
-                getWidth() * 3, getHeight(), Shape.WALL));
+                getWidth() * 3, getHeight(), Type.BARRICADE));
         add(new Matter(new Point(-getWidth() / 2, getHeight() / 2),
-                getWidth(), getHeight() * 3, Shape.WALL));
+                getWidth(), getHeight() * 3, Type.BARRICADE));
         add(new Matter(new Point(getWidth() / 2 * 3, getHeight() / 2),
-                getWidth(), getHeight() * 3, Shape.WALL));
+                getWidth(), getHeight() * 3, Type.BARRICADE));
     }
 
     public void add(Matter matter) {
@@ -46,6 +46,10 @@ public class BrickWorld extends JPanel {
         while (!Thread.interrupted()) {
             try {
                 repaint();
+                synchronized (matters) {
+                    matters.removeIf(matter ->
+                            matter instanceof DrawableMatter && ((DrawableMatter)matter).isZeroStrong());
+                }
                 Thread.sleep(INTERVAL);
             } catch (InterruptedException ignore) {
                 Thread.currentThread().interrupt();
@@ -59,10 +63,10 @@ public class BrickWorld extends JPanel {
         graphics.drawRect(0, 0, getWidth(), getHeight());
         synchronized (matters) {
             matters.stream()
-                    .filter(Figure.class::isInstance)
-                    .map(Figure.class::cast)
+                    .filter(DrawableMatter.class::isInstance)
+                    .map(DrawableMatter.class::cast)
                     .collect(Collectors.toList())
-                    .forEach(figure -> figure.draw(graphics));
+                    .forEach(drawableMatter -> drawableMatter.draw(graphics));
         }
     }
 }

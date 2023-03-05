@@ -1,4 +1,4 @@
-package type;
+package property;
 
 import coordinate.Vector;
 

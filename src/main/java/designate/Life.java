@@ -18,16 +18,16 @@ public enum Life {
         this.color = color;
     }
 
-    public static Life calculateLife(Life beforeLife, int damage) {
+    public Life calculateLife(int damage) {
         if (damage < 1) {
-            return beforeLife;
+            return this;
         }
 
-        if (beforeLife == INFINITY) {
-            return INFINITY;
+        if (this == INFINITY) {
+            return this;
         }
 
-        int nowLifeValue = Math.max(beforeLife.value - damage, 0);
+        int nowLifeValue = Math.max(this.value - damage, 0);
 
         return values()[nowLifeValue];
     }

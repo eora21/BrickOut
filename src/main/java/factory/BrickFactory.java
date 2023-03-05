@@ -1,41 +1,24 @@
 package factory;
 
 import coordinate.Point;
-import coordinate.Vector;
 import designate.Life;
 import designate.Shape;
-import matter.BouncyFigure;
-import matter.Figure;
-import matter.Matter;
-
-import java.util.List;
+import designate.Type;
+import matter.DrawableMatter;
 
 public class BrickFactory {
     private BrickFactory() {
 
     }
-    public static Figure create(Point location, int width, int height, Life life) {
-        Figure brick = new Figure(location, width, height, Shape.BRICK, life);
+    public static DrawableMatter create(Point location, int width, int height, Life life) {
+        DrawableMatter brick = new DrawableMatter(location, width, height, Type.TARGET, life, Shape.BRICK);
 
-//        brick.addCollisionEventListener(event -> {
-//            if (event.getDestination().getShape() == Shape.BRICK) {
-//                System.out.println("brick");
-//            }
-//        });
-//
-//        ball.addCollisionEventListener(event -> {
-//            if (event.getDestination().getShape() == Shape.BALL) {
-//                System.out.println("ball");
-//            }
-//        });
-//
-//        ball.addCollisionEventListener(event -> {
-//            if (event.getDestination().getShape() == Shape.WALL) {
-//                System.out.println("wall");
-//            }
-//        });
-//
-//        return ball;
+        brick.addCollisionEventListener(event -> {
+            if (event.getDestination().getType() == Type.DESTROYER) {
+                brick.getDamage(1);
+            }
+        });
+
         return brick;
     }
 }

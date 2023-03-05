@@ -1,21 +1,37 @@
 package matter;
 
 import coordinate.Point;
-import designate.Shape;
+import designate.Type;
+import event.CollisionEvent;
+import event.CollisionEventListener;
 
+import javax.swing.event.EventListenerList;
 import java.awt.*;
 
 public class Matter {
     private final Point location;
     private int width;
     private int height;
-    private final Shape shape;
+    private final Type type;
+    private final EventListenerList listenerList;
 
-    public Matter(Point location, int width, int height, Shape shape) {
+    public Matter(Point location, int width, int height, Type type) {
         this.location = location;
         this.width = width;
         this.height = height;
-        this.shape = shape;
+        this.type = type;
+        this.listenerList = new EventListenerList();
+    }
+
+    public void hit(Matter matter) {
+        CollisionEventListener[] listeners = getListenerList().getListeners(CollisionEventListener.class);
+        for (CollisionEventListener listener : listeners) {
+            listener.collisionEvent(new CollisionEvent(this, matter));
+        }
+    }
+
+    public void addCollisionEventListener(CollisionEventListener listener) {
+        listenerList.add(CollisionEventListener.class, listener);
     }
 
     public Point getLocation() {
@@ -46,19 +62,23 @@ public class Matter {
         return location.getY() + height / 2;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public EventListenerList getListenerList() {
+        return listenerList;
+    }
+
     public boolean isCollision(Matter other) {
         return getRectangle().intersects(other.getRectangle());
     }
 
-    protected Rectangle getIntersection(Matter other) {
+    public Rectangle getIntersection(Matter other) {
         return getRectangle().intersection(other.getRectangle());
     }
 
     protected Rectangle getRectangle() {
         return new Rectangle(getMinX(), getMinY(), getWidth(), getHeight());
-    }
-
-    public Shape getShape() {
-        return shape;
     }
 }

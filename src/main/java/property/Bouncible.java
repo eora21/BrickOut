@@ -1,7 +1,6 @@
-package type;
+package property;
 
 import event.CollisionEventListener;
-import matter.Matter;
 
 public interface Bouncible extends Movable {
 //    /**

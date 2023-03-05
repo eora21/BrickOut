@@ -2,18 +2,16 @@ package designate;
 
 import coordinate.Point;
 import functional.GraphicsConsumer;
-import type.Drawable;
 
 import java.awt.*;
 
 public enum Shape {
     BALL(Graphics::fillOval),
-    BRICK(Graphics::fillRect),
-    WALL(Graphics::fillRect);
+    BRICK(Graphics::fillRect);
 
-    private final GraphicsConsumer<Graphics> graphicsConsumer;
+    private final GraphicsConsumer graphicsConsumer;
 
-    Shape(GraphicsConsumer<Graphics> graphicsConsumer) {
+    Shape(GraphicsConsumer graphicsConsumer) {
         this.graphicsConsumer = graphicsConsumer;
     }
 
@@ -26,4 +24,3 @@ public enum Shape {
         graphics.setColor(oldColor);
     }
 }
-

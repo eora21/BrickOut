@@ -1,7 +1,5 @@
-package type;
+package property;
 
-
-import coordinate.Point;
 
 import java.awt.*;
 

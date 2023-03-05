@@ -4,26 +4,27 @@ import coordinate.Point;
 import coordinate.Vector;
 import designate.Life;
 import designate.Shape;
-import type.Movable;
+import designate.Type;
+import property.Movable;
 import view.BrickWorld;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovableFigure extends Figure implements Movable {
+public class MovableMatter extends DrawableMatter implements Movable {
     private final Thread thread;
     private final Vector motion;
     private final List<Vector> effects;
 
-    public MovableFigure(Point location, int width, int height, Shape shape, Life life, Vector motion) {
-        super(location, width, height, shape, life);
+    public MovableMatter(Point location, int width, int height, Type type, Life life, Shape shape, Vector motion) {
+        super(location, width, height, type, life, shape);
         this.motion = motion;
         thread = new Thread(this);
         effects = new ArrayList<>();
     }
 
-    public MovableFigure(Point location, int radius, Shape shape, Life life, Vector motion) {
-        this(location, radius, radius, shape, life, motion);
+    public MovableMatter(Point location, int radius, Type type, Life life, Shape shape, Vector motion) {
+        this(location, radius, radius, type, life, shape, motion);
     }
 
     @Override
@@ -46,6 +47,16 @@ public class MovableFigure extends Figure implements Movable {
     @Override
     public void stop() {
         thread.interrupt();
+    }
+
+    @Override
+    public boolean isZeroStrong() {
+        if (super.isZeroStrong()) {
+            stop();
+            return true;
+        }
+
+        return false;
     }
 
     @Override

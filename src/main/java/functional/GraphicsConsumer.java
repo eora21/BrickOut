@@ -1,6 +1,8 @@
 package functional;
 
+import java.awt.*;
+
 @FunctionalInterface
-public interface GraphicsConsumer<T> {
-    void accept(T t, int x, int y, int width, int height);
+public interface GraphicsConsumer {
+    void accept(Graphics graphics, int x, int y, int width, int height);
 }
