@@ -21,35 +21,14 @@ public class BrickFactory {
 
     public static DrawableMatter createNormalBrick(Point location, Feature feature) {
         DrawableMatter brick = new DrawableMatter(location, WIDTH, HEIGHT, Type.TARGET, feature, Shape.BRICK);
-
-        brick.addCollisionEventListener(getCollisionEventListener(brick));
-
-        if (feature == Feature.SPEED_UP) {
-            brick.addCollisionEventListener(event -> {
-                if (event.getDestination().getType() != Type.DESTROYER) {
-                    return;
-                }
-
-                BallFactory.speedUp();
-            });
-        }
-
-        if (feature != Feature.UNBREAKABLE && feature != Feature.DEAD) {
-            BrickGame.plusLeftBlock();
-        }
-
+        defaultBrickSetting(brick);
         return brick;
     }
 
     public static MovableMatter createMovableBrick(Point location, Feature feature, Vector vector) {
         MovableMatter brick = new MovableMatter(location, WIDTH, HEIGHT, Type.TARGET, feature, Shape.BRICK, vector);
-
-        brick.addCollisionEventListener(getCollisionEventListener(brick));
+        defaultBrickSetting(brick);
         brick.addCollisionEventListener(event -> brick.getMotion().flipX());
-
-        if (feature != Feature.UNBREAKABLE && feature != Feature.DEAD) {
-            BrickGame.plusLeftBlock();
-        }
 
         return brick;
     }
@@ -72,6 +51,25 @@ public class BrickFactory {
         });
 
         return brick;
+    }
+
+    private static void defaultBrickSetting(DrawableMatter brick) {
+        brick.addCollisionEventListener(getCollisionEventListener(brick));
+        Feature feature = brick.getFeature();
+
+        if (feature == Feature.SPEED_UP) {
+            brick.addCollisionEventListener(event -> {
+                if (event.getDestination().getType() != Type.DESTROYER) {
+                    return;
+                }
+
+                BallFactory.speedUp();
+            });
+        }
+
+        if (feature != Feature.UNBREAKABLE && feature != Feature.DEAD) {
+            BrickGame.plusLeftBlock();
+        }
     }
 
     private static CollisionEventListener getCollisionEventListener(DrawableMatter brick) {

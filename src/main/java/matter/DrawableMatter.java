@@ -34,6 +34,10 @@ public class DrawableMatter extends Matter implements Drawable {
         this.feature = feature.calculateLife(damage);
     }
 
+    public Feature getFeature() {
+        return feature;
+    }
+
     @Override
     public void draw(Graphics graphics) {
         shape.draw(graphics, this, feature.getColor());
