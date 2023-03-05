@@ -18,6 +18,13 @@ import java.util.Random;
 public class BrickGame extends JFrame {
     private final BrickWorld world;
     private final MovableMatter player;
+    private static int bounceCount = 0;
+    private static int gameScore = 0;
+    private static int leftBrick = 0;
+
+    private static final JLabel bounceLabel = new JLabel();
+    private static final JLabel scoreLabel = new JLabel();
+    private static final JLabel brickLabel = new JLabel();
 
     public BrickGame(int width, int height) {
         setSize(width, height);
@@ -47,6 +54,37 @@ public class BrickGame extends JFrame {
                 player.setMotion(new Vector(0, 0));
             }
         });
+
+        bounceLabel.setBounds(world.getX(), world.getY() - 50, 150, 40);
+        bounceLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(bounceLabel);
+
+        scoreLabel.setBounds(bounceLabel.getX() + bounceLabel.getWidth() + 10, bounceLabel.getY() , 150, 40);
+        scoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(scoreLabel);
+
+        brickLabel.setBounds(scoreLabel.getX() + scoreLabel.getWidth() + 10, scoreLabel.getY() , 150, 40);
+        brickLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        add(brickLabel);
+    }
+
+    public static void plusBounceCount() {
+        bounceCount++;
+        bounceLabel.setText("bounceCount : " + bounceCount);
+    }
+
+    public static void plusScore(int score) {
+        gameScore += score;
+        scoreLabel.setText("score : " + gameScore);
+    }
+
+    public static void plusLeftBlock() {
+        leftBrick += 1;
+        brickLabel.setText("leftBrick : " + leftBrick);
+    }
+    public static void minusLeftBlock() {
+        leftBrick -= 1;
+        brickLabel.setText("leftBrick : " + leftBrick);
     }
 
     public void run() {
@@ -78,19 +116,6 @@ public class BrickGame extends JFrame {
         world.add(ball);
         world.add(BrickFactory.createMovableBrick(
                 new Point(100, 70), Feature.NORMAL, new Vector(5, -180)));
-//        world.add(BallFactory.create(
-//                new Point(400, 300), 20, new Vector(10, 90), world.getMatters()));
-//        world.add(BallFactory.create(
-//                new Point(420, 300), 20, new Vector(10, 90), world.getMatters()));
-//        world.add(BallFactory.create(
-//                new Point(440, 300), 20, new Vector(10, 90), world.getMatters()));
-//        world.add(BallFactory.create(
-//                new Point(460, 300), 20, new Vector(10, 90), world.getMatters()));
-//        world.add(BallFactory.create(
-//                new Point(480, 300), 20, new Vector(10, 90), world.getMatters()));
-
-//        world.add(BallFactory.create(
-//                new Point(300, 300), 20, new Vector(10, -45), world.getMatters()));®®
         world.run();
     }
 }

@@ -7,6 +7,7 @@ import designate.Shape;
 import designate.Type;
 import matter.Matter;
 import matter.MovableMatter;
+import view.BrickGame;
 
 import java.awt.*;
 import java.util.List;
@@ -38,6 +39,8 @@ public class BallFactory {
                 ball.getMotion().flipX();
             }
         });
+
+        ball.addCollisionEventListener(event -> BrickGame.plusBounceCount());
 
         return ball;
     }

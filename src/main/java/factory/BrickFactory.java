@@ -8,6 +8,7 @@ import designate.Type;
 import event.CollisionEventListener;
 import matter.DrawableMatter;
 import matter.MovableMatter;
+import view.BrickGame;
 
 public class BrickFactory {
 
@@ -33,6 +34,10 @@ public class BrickFactory {
             });
         }
 
+        if (feature != Feature.UNBREAKABLE && feature != Feature.DEAD) {
+            BrickGame.plusLeftBlock();
+        }
+
         return brick;
     }
 
@@ -41,6 +46,10 @@ public class BrickFactory {
 
         brick.addCollisionEventListener(getCollisionEventListener(brick));
         brick.addCollisionEventListener(event -> brick.getMotion().flipX());
+
+        if (feature != Feature.UNBREAKABLE && feature != Feature.DEAD) {
+            BrickGame.plusLeftBlock();
+        }
 
         return brick;
     }
@@ -68,7 +77,13 @@ public class BrickFactory {
     private static CollisionEventListener getCollisionEventListener(DrawableMatter brick) {
         return event -> {
             if (event.getDestination().getType() == Type.DESTROYER) {
+                BrickGame.plusScore(10);
                 brick.getDamage(1);
+            }
+
+            if (brick.isZeroStrong()) {
+                BrickGame.plusScore(20);
+                BrickGame.minusLeftBlock();
             }
         };
     }
