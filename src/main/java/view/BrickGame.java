@@ -112,7 +112,7 @@ public class BrickGame extends JFrame {
             }
         }
         Matter ball = BallFactory.create(
-                new Point(500, 500), 20, -45, world.getMatters());
+                new Point(500, 500), 20, -45);
         world.add(ball);
         world.add(BrickFactory.createMovableBrick(
                 new Point(100, 70), Feature.NORMAL, new Vector(5, -180)));

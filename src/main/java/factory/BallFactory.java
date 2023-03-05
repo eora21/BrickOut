@@ -20,7 +20,7 @@ public class BallFactory {
 
     }
 
-    public static MovableMatter create(Point location, int radius, int angle, List<Matter> matters) {
+    public static MovableMatter create(Point location, int radius, int angle) {
         MovableMatter ball = new MovableMatter(
                 location, radius, Type.DESTROYER, Feature.UNBREAKABLE, Shape.BALL,
                 new Vector(BALL_SPEED + addSpeed, angle));
